@@ -24,7 +24,7 @@ class HomeScreenBottom extends StatelessWidget {
               children: <Widget>[
                 Text(
                   "Watch others",
-                  style: textTheme.title.copyWith(
+                  style: textTheme.headline1.copyWith(
                       fontSize: 22.0, fontFamily: "SF-Pro-Display-Bold"),
                 ),
                 RotatedBox(

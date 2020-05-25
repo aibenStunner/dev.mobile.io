@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fit: StackFit.expand,
           children: <Widget>[
             Positioned(
-              right: screenWidth * -0.026,
+              right: screenWidth * -0.07,
               top: screenHeight * 0.023,
               child: SvgPicture.asset(
                 'images/login_background.svg',
@@ -93,8 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Text(
                           "Welcome.",
-                          style: textTheme.headline.copyWith(
+                          style: textTheme.headline1.copyWith(
                               letterSpacing: .6,
+                              color: Colors.black,
                               fontWeight: FontWeight.w900,
                               fontSize: 26),
                         ),
@@ -106,7 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           left: screenWidth * 0.033),
                       child: Text(
                         'Sign in to continue.',
-                        style: textTheme.title.copyWith(fontSize: 17.5),
+                        style: textTheme.headline1
+                            .copyWith(fontSize: 17.5, color: Colors.black),
                       ),
                     ),
                     SizedBox(
@@ -141,8 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text("Login",
-                                style: textTheme.headline.copyWith(
+                                style: textTheme.headline1.copyWith(
                                     letterSpacing: .6,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w800,
                                     fontSize: 24.8)),
                             SizedBox(
@@ -174,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: <Widget>[
                                   Text(
                                     "Forgot Password?",
-                                    style: textTheme.body1.copyWith(
+                                    style: textTheme.bodyText1.copyWith(
                                         color: Colors.blue,
                                         fontWeight: FontWeight.w800),
                                   )
@@ -204,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               width: screenWidth * 0.02,
                             ),
                             Text("Remember me",
-                                style: textTheme.body1.copyWith(
+                                style: textTheme.bodyText1.copyWith(
                                     fontSize: 12.7,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: .005))
@@ -240,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: <Widget>[
                         Text(
                           "New User? ",
-                          style: textTheme.body1
+                          style: textTheme.bodyText1
                               .copyWith(fontWeight: FontWeight.w800),
                         ),
                         InkWell(
@@ -249,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Text(
                             "Sign Up",
-                            style: textTheme.body1.copyWith(
+                            style: textTheme.bodyText1.copyWith(
                                 color: Colors.blue,
                                 fontWeight: FontWeight.w800),
                           ),

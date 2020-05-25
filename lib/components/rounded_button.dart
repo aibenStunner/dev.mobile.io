@@ -180,7 +180,7 @@ class _RoundedButtonState extends State<RoundedButton>
                 ? _loader
                 : Text(
                     widget.text,
-                    style: textTheme.title.copyWith(
+                    style: textTheme.headline1.copyWith(
                         letterSpacing: 1.0,
                         color: Colors.white,
                         fontWeight: FontWeight.w800,

@@ -83,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Laboski Bezoz",
-                        style: textTheme.title,
+                        style: textTheme.headline5,
                       ),
                     ),
                   ),
@@ -140,7 +140,7 @@ EdgeInsets.only(top: screenHeight * 0.025),
                         child: Center(
                             child: Text(
                           "LOGOUT",
-                          style: textTheme.title.copyWith(
+                          style: textTheme.headline1.copyWith(
                               letterSpacing: 1.0,
                               color: Colors.white,
                               fontWeight: FontWeight.w800,

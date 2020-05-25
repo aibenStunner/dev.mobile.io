@@ -141,7 +141,7 @@ class ScreenLayoutState extends State<ScreenLayout> {
                               Text(
                                 Provider.of<StreamData>(context)
                                     .currentStreamTitle,
-                                style: textTheme.title.copyWith(
+                                style: textTheme.headline1.copyWith(
                                     color: Colors.white,
                                     fontSize: 17.0,
                                     fontFamily: 'Roboto',
@@ -153,7 +153,7 @@ class ScreenLayoutState extends State<ScreenLayout> {
                                         Provider.of<CameraStreams>(context)
                                             .currentCamera]
                                     .title,
-                                style: textTheme.body1.copyWith(
+                                style: textTheme.bodyText1.copyWith(
                                     color: Colors.grey,
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w700,
@@ -198,7 +198,7 @@ class ScreenLayoutState extends State<ScreenLayout> {
                             ),
                             child: Text(
                               "$cameraCount Cameras",
-                              style: textTheme.body1.copyWith(
+                              style: textTheme.bodyText1.copyWith(
                                   color: Colors.grey,
                                   fontSize: 15.0,
                                   fontFamily: 'Roboto',

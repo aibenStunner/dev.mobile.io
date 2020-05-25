@@ -56,7 +56,7 @@ class SubStreamCard extends StatelessWidget {
                 ),
                 child: Text(
                   sTitle,
-                  style: textTheme.title.copyWith(
+                  style: textTheme.headline1.copyWith(
                     color: (Provider.of<CameraStreams>(context).currentCamera !=
                             sIndex)
                         ? Colors.grey

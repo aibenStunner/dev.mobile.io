@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           fit: StackFit.expand,
           children: <Widget>[
             Positioned(
-              right: screenWidth * -0.033,
+              right: screenWidth * -0.07,
               top: screenHeight * 0.024,
               child: SvgPicture.asset(
                 'images/sign_up_background.svg',
@@ -84,9 +84,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         Text(
                           "Welcome.",
-                          style: textTheme.headline.copyWith(
+                          style: textTheme.headline1.copyWith(
                               letterSpacing: .6,
                               fontWeight: FontWeight.w900,
+                              color: Colors.black,
                               fontSize: 26),
                         ),
                       ],
@@ -96,7 +97,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           top: screenHeight * 0.148, left: screenWidth * 0.033),
                       child: Text(
                         'Enter details to register.',
-                        style: textTheme.title.copyWith(fontSize: 17.5),
+                        style: textTheme.headline1.copyWith(
+                          fontSize: 17.5,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -135,10 +139,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text("Sign Up",
-                                      style: textTheme.headline.copyWith(
+                                      style: textTheme.headline1.copyWith(
                                           letterSpacing: .6,
                                           fontWeight: FontWeight.w800,
+                                          color: Colors.black,
                                           fontSize: 24.8)),
+                                  SizedBox(
+                                    height: screenHeight * 0.0225,
+                                  ),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      labelText: 'First Name',
+                                      labelStyle: TextStyle(fontSize: 19.3),
+                                    ),
+                                    onChanged: (value) {},
+                                  ),
+                                  SizedBox(
+                                    height: screenHeight * 0.0225,
+                                  ),
+                                  TextField(
+                                    decoration: InputDecoration(
+                                      labelText: 'Last Name',
+                                      labelStyle: TextStyle(fontSize: 19.3),
+                                    ),
+                                    onChanged: (value) {},
+                                  ),
                                   SizedBox(
                                     height: screenHeight * 0.0225,
                                   ),

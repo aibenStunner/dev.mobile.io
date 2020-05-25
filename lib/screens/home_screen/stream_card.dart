@@ -64,7 +64,7 @@ class StreamCard extends StatelessWidget {
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: textTheme.title.copyWith(
+                  style: textTheme.headline1.copyWith(
                     fontFamily: "SF-Pro-Display-Bold",
                     fontSize: 16.0,
                   ),

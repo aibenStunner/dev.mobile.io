@@ -74,7 +74,7 @@ class _HomeScreenTopState extends State<HomeScreenTop> {
                             child: Text(
                               Provider.of<StreamData>(context)
                                   .currentStreamTitle,
-                              style: textTheme.headline.copyWith(
+                              style: textTheme.headline1.copyWith(
                                   fontFamily: "SF-Pro-Display-Bold",
                                   color: Colors.white,
                                   fontSize: 45.0),
@@ -121,7 +121,7 @@ class _HomeScreenTopState extends State<HomeScreenTop> {
                         children: <Widget>[
                           Text(
                             "Watch Now",
-                            style: textTheme.title.copyWith(
+                            style: textTheme.headline1.copyWith(
                                 color: Colors.white,
                                 fontFamily: 'SF-Pro-Display-Bold',
                                 fontSize: 15),
