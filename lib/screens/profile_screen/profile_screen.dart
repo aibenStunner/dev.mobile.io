@@ -1,13 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
+import 'package:gods_eye/screens/login_screen/login_screen.dart';
+import 'package:http/http.dart' as http;
 import 'package:gods_eye/screens/profile_screen/children_list.dart';
 
 class ProfileScreen extends StatelessWidget {
-  void _validateLogout(context) {
-    Navigator.popUntil(context, (route) => route.isFirst);
+  // backend endpoint
+  final logoutEndpoint =
+      'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/logout';
+
+  void _validateLogout(context) async {
+    // post data to backend and await response
+    var response = await http.post(logoutEndpoint, body: {});
+    var data = jsonDecode(response.body);
+    print(data);
+    // logout the user
+    if (data["status"].containsKey("failure")) {
+      Navigator.pushReplacementNamed(context, LoginScreen.id);
+    }
   }
 
   @override
@@ -104,12 +119,12 @@ class ProfileScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: screenHeight * 0.01),
                     child: Text(
                       "Your Children",
-                      style: textTheme.bodyText1.copyWith(fontWeight: FontWeight.bold),
+                      style: textTheme.bodyText1
+                          .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
-                      padding:
-EdgeInsets.only(top: screenHeight * 0.025),
+                      padding: EdgeInsets.only(top: screenHeight * 0.025),
                       child: ConstrainedBox(
                           constraints:
                               BoxConstraints(maxHeight: screenHeight * 0.2),
