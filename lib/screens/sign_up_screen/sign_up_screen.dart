@@ -94,8 +94,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     //validate password
     String _validatePassword(String password) {
-      RegExp strongPassowrd = RegExp(
-          r'^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[!@#\$&*~]).{8,}$');
+      // RegExp strongPassowrd = RegExp(
+      //     r'^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[!@#\$&*~]).{8,}$');
       if (password.length < 8) {
         return "Minimum length is 8 characters";
       }

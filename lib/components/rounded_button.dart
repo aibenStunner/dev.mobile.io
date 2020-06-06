@@ -59,12 +59,6 @@ class _RoundedButtonState extends State<RoundedButton>
       setState(() {});
     });
 
-    _squeezeAnimation.addStatusListener((state) {
-      if (state == AnimationStatus.completed) {
-        widget.onPressed();
-      }
-    });
-
     _squeezeAnimationCircular =
         Tween<double>(begin: widget.height * 0.15, end: widget.height * 0.6)
             .animate(new CurvedAnimation(
