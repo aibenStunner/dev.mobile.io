@@ -1,11 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/rounded_button.dart';
 import 'package:gods_eye/screens/login_screen/login_screen.dart';
+import 'dart:convert'; // for the utf8.encode method
+import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
+
 
 class SignUpScreen extends StatefulWidget {
   static String id = 'sign_up_screen';
@@ -16,32 +19,156 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final RoundedButtonController _btnController = new RoundedButtonController();
 
+  //Signup form key to manage validation
+  final GlobalKey<FormState> _signUpFormKey = GlobalKey<FormState>();
+
+  //Sign up data
+  String firstName;
+  String lastName;
+  String email;
+  String password;
+  String confirmPassword;
+  String nChildren;
+
+  //backend endpoint
+  final signUpEndpoint = 'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/signup';
+  bool _isInvalid = false; // managed after response from server to strike input field
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    void _validateSignUp() async {
-      // Sign up fail
-      Timer(Duration(seconds: 3), () {
-        _btnController.error();
-        Timer(Duration(seconds: 2), () {
-          _btnController.stop();
-          _btnController.reset();
-        });
-      });
-
-      // Sign up success
-//      Timer(Duration(seconds: 3), () {
-//        _btnController.success();
-//        Timer(Duration(seconds: 2), () {
-//          Navigator.pushNamed(context, LoginScreen.id);
-//      _btnController.stop();
-//      _btnController.reset();
-//        });
-//      });
+    //valid firstName
+    String _validateFirstName(String firstName) {
+      RegExp nameRegExp = RegExp(r'(^[a-zA-Z ]*$)');
+      if (firstName.length == 0) {
+        return "First name is required";
+      } else if (!nameRegExp.hasMatch(firstName)) {
+        return "Name must be a-z and A-Z";
+      }
+      return null;
     }
+
+    // validate lastName
+    String _validateLastName(String lastName) {
+      RegExp nameRegExp = RegExp(r'(^[a-zA-Z ]*$)');
+      if (lastName.length == 0) {
+        return "Last name is required";
+      } else if (!nameRegExp.hasMatch(lastName)) {
+        return "Name must be a-z and A-Z";
+      }
+      return null;
+    }
+
+    //validate email
+    String _validateEmail(String email) {
+      RegExp emailRegExp = RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+"
+      );
+      if (_isInvalid) {
+        //disable message until after next async call
+        _isInvalid = false;
+        return "This email already exist";
+      }
+      if (emailRegExp.hasMatch(email)) {
+        return null;
+      }
+      else if (email.length == 0) {
+        return "Email is required";
+      }
+      else {
+        return "Enter valid email";
+      }
+    }
+
+    //validate number of children
+    String _validateNChildren(String nChildren) {
+      if (nChildren.length == 0) {
+        return "Number of children is required";
+      }
+      return null;
+    }
+
+    //validate password
+    String _validatePassword(String password) {
+      RegExp strongPassowrd = RegExp(
+          r'^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[!@#\$&*~]).{8,}$');
+      if (password.length < 8) {
+        return "Minimum length is 8 characters";
+      }
+      return null;
+    }
+
+    //validate confirm password
+    String _validateConfirmPassword(String confirmPassword){
+      if(password != confirmPassword){
+        return "Password does not match";
+      }
+      return null;
+    }
+
+    void _validateSignUp() async{
+      if(_signUpFormKey.currentState.validate()){
+        //everything okay so proceed to sign up
+        _signUpFormKey.currentState.save();
+
+        //dismiss keyboard during async call
+        FocusScope.of(context).requestFocus(new FocusNode());
+
+        // md5 hash password before posting
+        var passwordUTF8 = utf8.encode(password); //data being hashed
+        var hashedPassword = md5.convert(passwordUTF8);
+
+        Map postData = {
+          "firstName": "$firstName",
+          "lastName": "$lastName",
+          "password": "$hashedPassword",
+          "nChildren":"$nChildren",
+          "email":"$email"
+        };
+        //post data to backend and await response
+        var response = await http.post(signUpEndpoint, body: postData);
+        var data = jsonDecode(response.body);
+
+        //check if whether sign up was successful
+        if (data["status"]. containsKey("failure")){
+          //Sign up failure(email already exists)
+          setState(() {
+            _isInvalid = true;
+          });
+          //show error animation of button
+          _btnController.error();
+          Timer(Duration(seconds: 2), () {
+            _btnController.stop();
+            _btnController.reset();
+          });
+        }
+        else if (data["status"].containsKey("success")){
+      //Sign up success
+      // show success animation of button and pyush back to login screen
+      _btnController.success();
+      Timer(Duration(seconds: 2), () {
+      Navigator.pushNamed(context, LoginScreen.id);
+      _btnController.stop();
+      _btnController.reset();
+      });
+      }
+      }
+      else{
+        //show error animation on button
+      _btnController.error();
+      Timer(Duration (seconds: 2), (){
+        _btnController.stop();
+        _btnController.reset();
+      });
+      }
+      }
+
+// run the validators on reload to process async results
+    _signUpFormKey.currentState?.validate();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -147,62 +274,122 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   SizedBox(
                                     height: screenHeight * 0.0225,
                                   ),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      labelText: 'First Name',
-                                      labelStyle: TextStyle(fontSize: 19.3),
-                                    ),
-                                    onChanged: (value) {},
-                                  ),
+                                  Form(
+                                    key: _signUpFormKey,
+                                    child: Column(
+                                      children: <Widget>[
+                                        TextFormField(
+                                          validator: _validateFirstName,
+                                          textCapitalization: TextCapitalization.words,
+                                          keyboardType: TextInputType.text,
+                                          decoration: InputDecoration(
+                                            labelStyle: TextStyle(fontSize: 19.3),
+                                          ),
+                                            onChanged: (value){
+                                              firstName = value;
+                                              setState(() {
+                                                _validateFirstName(firstName);
+                                              });
+                                            }
+                                          ),
+
                                   SizedBox(
                                     height: screenHeight * 0.0225,
                                   ),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Last Name',
-                                      labelStyle: TextStyle(fontSize: 19.3),
-                                    ),
-                                    onChanged: (value) {},
-                                  ),
+                            TextFormField(
+                                validator: _validateLastName,
+                                textCapitalization: TextCapitalization.words,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  labelText: 'Last Name',
+                                  labelStyle:
+                                  TextStyle(fontSize: 19.3),
+                                ),
+                                onChanged: (value) {
+                                  lastName = value;
+                                  setState(() {
+                                    _validateLastName(lastName);
+                                  });
+                                }),
                                   SizedBox(
                                     height: screenHeight * 0.0225,
                                   ),
-                                  TextField(
-                                    decoration: InputDecoration(
-                                      labelText: 'Email',
-                                      labelStyle: TextStyle(fontSize: 19.3),
-                                    ),
-                                    onChanged: (value) {},
-                                  ),
+                                 TextFormField(
+                                   validator: _validateEmail,
+                                   keyboardType: TextInputType.text,
+                                   decoration: InputDecoration(
+                                     labelText: 'Email',
+                                     labelStyle: TextStyle(fontSize: 19.3),
+                                   ),
+                                   onChanged: (value){
+                                     email = value;
+                                     setState(() {
+                                       _validateEmail(email);
+                                     });
+                                   },
+                                 ),
                                   SizedBox(
                                     height: screenHeight * 0.0225,
                                   ),
-                                  TextField(
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      labelStyle: TextStyle(fontSize: 19.3),
-                                    ),
-                                    onChanged: (value) {},
-                                  ),
+                            TextFormField(
+                                validator: _validateNChildren,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: 'Number of Children',
+                                  labelStyle:
+                                  TextStyle(fontSize: 19.3),
+                                ),
+                                onChanged: (value) {
+                                  nChildren = value;
+                                  setState(() {
+                                    _validateNChildren(nChildren);
+                                  });
+                                }),
+                            SizedBox(
+                              height: screenHeight * 0.0225,
+                            ),
+                            TextFormField(
+                                validator: _validatePassword,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  labelText: 'Password',
+                                  labelStyle:
+                                  TextStyle(fontSize: 19.3),
+                                ),
+                                onChanged: (value) {
+                                  password = value;
+                                  setState(() {
+                                    _validatePassword(password);
+                                  });
+                                }),
                                   SizedBox(
                                     height: screenHeight * 0.0225,
                                   ),
-                                  TextField(
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      labelText: 'Confirm Password',
-                                      labelStyle: TextStyle(fontSize: 19.3),
-                                    ),
-                                    onChanged: (value) {},
-                                  ),
+                            TextFormField(
+                                validator: _validateConfirmPassword,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  labelText: 'Confirm Password',
+                                  labelStyle:
+                                  TextStyle(fontSize: 19.3),
+                                ),
+                                onChanged: (value) {
+                                  confirmPassword = value;
+                                  setState(() {
+                                    _validateConfirmPassword(
+                                        confirmPassword);
+                                  });
+                                }),
                                   Padding(
                                       padding: EdgeInsets.only(
                                           top: screenHeight * 0.045))
                                 ],
                               ),
                             ),
-                          ],
+                    ]
+                              )
+    )
+    ],
                         ),
                       ),
                     ),
@@ -232,15 +419,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: screenWidth * 0.03,
                         ),
                         horizontalLine()
+
                       ],
                     ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+      ],
+    ),
+    ),
+    )
+          ]
+      )
+    )
     );
-  }
+
+}
 }
