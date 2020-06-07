@@ -22,8 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isSelected = false;
   final RoundedButtonController _btnController = new RoundedButtonController();
 
-
-   // Login form key to manage validation
+  // Login form key to manage validation
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
 
   // Login data
@@ -47,14 +46,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _loggedIn =
       false; // managed after response from server to strike input field
 
-
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     TextTheme textTheme = Theme.of(context).textTheme;
 
- // validate email
+    // validate email
     String _validateEmail(String email) {
       RegExp emailRegExp = RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -92,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       return null;
     }
+
     void _validateLogin() async {
       if (_loginFormKey.currentState.validate()) {
         // everything okay so proceed to login
@@ -103,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
         // md5 hash password before posting
         var passwordUTF8 = utf8.encode(password); // data being hashed
         var hashedPassword = md5.convert(passwordUTF8);
-         Map postData = {
+        Map postData = {
           "email": "$email",
           "password": "$hashedPassword",
         };
@@ -124,6 +123,17 @@ class _LoginScreenState extends State<LoginScreen> {
             _btnController.stop();
             _btnController.reset();
           });
+        } else if (data["status"].containsKey("failure")) {
+          // Login failure(Wrong password)
+          setState(() {
+            _isInvalidPassword = true;
+          });
+          // show error animation of button
+          _btnController.error();
+          Timer(Duration(seconds: 2), () {
+            _btnController.stop();
+            _btnController.reset();
+          });
         } else if (data["status"].containsKey("illegal")) {
           // Login failure(User already logged in)
           setState(() {
@@ -136,11 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
             _btnController.reset();
           });
         } else if (data["status"].containsKey("success")) {
-
-      // Login Success
-      //show sucess animation of button and push to main screen
-    
-           _btnController.success();
+          // Login Success
+          //show sucess animation of button and push to main screen
+          _btnController.success();
           Timer(Duration(seconds: 2), () {
             Navigator.pushReplacementNamed(context, MainNav.id);
             _btnController.stop();
@@ -158,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     _loginFormKey.currentState?.validate();
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: true,
@@ -258,12 +266,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(
                               height: screenHeight * 0.0225,
                             ),
-
                             Form(
-                                 key: _loginFormKey,
+                              key: _loginFormKey,
                               child: Column(
                                 children: <Widget>[
-                                 TextFormField(
+                                  TextFormField(
                                     validator: _validateEmail,
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
