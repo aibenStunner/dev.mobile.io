@@ -283,6 +283,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           textCapitalization: TextCapitalization.words,
                                           keyboardType: TextInputType.text,
                                           decoration: InputDecoration(
+                                            labelText: 'First Name',
                                             labelStyle: TextStyle(fontSize: 19.3),
                                           ),
                                             onChanged: (value){
