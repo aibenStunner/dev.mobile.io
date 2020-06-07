@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert'; // for the utf8.encode method and jsonDecode
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/radio_button.dart';
 import 'package:gods_eye/components/rounded_button.dart';
 import 'package:gods_eye/screens/main_nav.dart';
+import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,11 +22,31 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isSelected = false;
   final RoundedButtonController _btnController = new RoundedButtonController();
 
+
+   // Login form key to manage validation
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+
+  // Login data
+  String email;
+  String password;
+
+  // backend endpoint
+  final loginEndpoint =
+      'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/login';
+
   void _radio() {
     setState(() {
       _isSelected = !_isSelected;
     });
   }
+
+  bool _isInvalidEmail =
+      false; // managed after response from server to strike email input field
+  bool _isInvalidPassword =
+      false; // managed after response from server to strike password input field
+  bool _loggedIn =
+      false; // managed after response from server to strike input field
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +54,111 @@ class _LoginScreenState extends State<LoginScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     TextTheme textTheme = Theme.of(context).textTheme;
 
+ // validate email
+    String _validateEmail(String email) {
+      RegExp emailRegExp = RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+      if (_isInvalidEmail) {
+        // disable message until after next async call
+        _isInvalidEmail = false;
+        return "Incorrect Email";
+      }
+      if (_loggedIn) {
+        // disable message until after next async call
+        _loggedIn = false;
+        return "User already logged in";
+      }
+      if (emailRegExp.hasMatch(email)) {
+        return null;
+      } else if (email.length == 0) {
+        return "Email is required";
+      } else {
+        return "Enter valid email";
+      }
+    }
+
+    // validate password
+    String _validatePassword(String password) {
+      // RegExp strongPassword = Reg( r'^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[!@#\$&*~]).{8,}$');
+      if (_isInvalidPassword) {
+        // disable message until after next async call
+        _isInvalidPassword = false;
+        return "Incorrect Password";
+      }
+      if (password.length == 0) {
+        return "Password is required";
+      } else if (password.length < 8) {
+        return "Minimum length is 8 characters";
+      }
+      return null;
+    }
     void _validateLogin() async {
-      // Login Fail
-//      Timer(Duration(seconds: 3), () {
-//        _btnController.error();
-//        Timer(Duration(seconds: 2), () {
-//          _btnController.stop();
-//          _btnController.reset();
-//        });
-//      });
+      if (_loginFormKey.currentState.validate()) {
+        // everything okay so proceed to login
+        _loginFormKey.currentState.save();
+
+        // dismiss keyboard during async call
+        FocusScope.of(context).requestFocus(new FocusNode());
+
+        // md5 hash password before posting
+        var passwordUTF8 = utf8.encode(password); // data being hashed
+        var hashedPassword = md5.convert(passwordUTF8);
+         Map postData = {
+          "email": "$email",
+          "password": "$hashedPassword",
+        };
+        // post data to backend and await response
+        var response = await http.post(loginEndpoint, body: postData);
+        var data = jsonDecode(response.body);
+
+        // check if whether login was succesfull
+        if (data.containsKey("failure")) {
+          // Login failure(User not found)
+          setState(() {
+            _isInvalidEmail = true;
+            _isInvalidPassword = true;
+          });
+          // show error animation of button
+          _btnController.error();
+          Timer(Duration(seconds: 2), () {
+            _btnController.stop();
+            _btnController.reset();
+          });
+        } else if (data["status"].containsKey("illegal")) {
+          // Login failure(User already logged in)
+          setState(() {
+            _loggedIn = true;
+          });
+          // show error animation of button
+          _btnController.error();
+          Timer(Duration(seconds: 2), () {
+            _btnController.stop();
+            _btnController.reset();
+          });
+        } else if (data["status"].containsKey("success")) {
 
       // Login Success
-      Timer(Duration(seconds: 3), () {
-        _btnController.success();
+      //show sucess animation of button and push to main screen
+    
+           _btnController.success();
+          Timer(Duration(seconds: 2), () {
+            Navigator.pushReplacementNamed(context, MainNav.id);
+            _btnController.stop();
+            _btnController.reset();
+          });
+        }
+      } else {
+        // show error animation on button
+        _btnController.error();
         Timer(Duration(seconds: 2), () {
-          Navigator.pushNamed(context, MainNav.id);
           _btnController.stop();
           _btnController.reset();
         });
-      });
+      }
     }
 
+    _loginFormKey.currentState?.validate();
+    
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomPadding: true,
@@ -151,23 +258,44 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(
                               height: screenHeight * 0.0225,
                             ),
-                            TextField(
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(fontSize: 19.3),
+
+                            Form(
+                                 key: _loginFormKey,
+                              child: Column(
+                                children: <Widget>[
+                                 TextFormField(
+                                    validator: _validateEmail,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      labelText: 'Email',
+                                      labelStyle: TextStyle(fontSize: 19.3),
+                                    ),
+                                    onChanged: (value) {
+                                      email = value;
+                                      setState(() {
+                                        _validateEmail(email);
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: screenHeight * 0.0225,
+                                  ),
+                                  TextFormField(
+                                    validator: _validatePassword,
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                      labelText: 'Password',
+                                      labelStyle: TextStyle(fontSize: 19.3),
+                                    ),
+                                    onChanged: (value) {
+                                      password = value;
+                                      setState(() {
+                                        _validatePassword(password);
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
-                              onChanged: (value) {},
-                            ),
-                            SizedBox(
-                              height: screenHeight * 0.0225,
-                            ),
-                            TextField(
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                labelStyle: TextStyle(fontSize: 19.3),
-                              ),
-                              onChanged: (value) {},
                             ),
                             Padding(
                               padding:
