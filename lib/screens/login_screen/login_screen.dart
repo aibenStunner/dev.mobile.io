@@ -8,7 +8,7 @@ import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/radio_button.dart';
 import 'package:gods_eye/components/rounded_button.dart';
 import 'package:gods_eye/screens/main_nav.dart';
-import 'package:http/http.dart' as http;
+import 'package:gods_eye/utils/session.dart';
 import 'package:crypto/crypto.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
 
@@ -24,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Login form key to manage validation
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+
+  Session session = Session();
 
   // Login data
   String email;
@@ -106,61 +108,63 @@ class _LoginScreenState extends State<LoginScreen> {
           "email": "$email",
           "password": "$hashedPassword",
         };
-        // post data to backend and await response
-        var response = await http.post(loginEndpoint, body: postData);
-        var data = jsonDecode(response.body);
 
-        // check if whether login was succesfull
-        if (data.containsKey("failure")) {
-          // Login failure(User not found)
-          setState(() {
-            _isInvalidEmail = true;
-            _isInvalidPassword = true;
-          });
-          // show error animation of button
-          _btnController.error();
-          Timer(Duration(seconds: 2), () {
-            _btnController.stop();
-            _btnController.reset();
-          });
-        } else if (data["status"].containsKey("failure")) {
-          // Login failure(Wrong password)
-          setState(() {
-            _isInvalidPassword = true;
-          });
-          // show error animation of button
-          _btnController.error();
-          Timer(Duration(seconds: 2), () {
-            _btnController.stop();
-            _btnController.reset();
-          });
-        } else if (data["status"].containsKey("illegal")) {
-          // Login failure(User already logged in)
-          setState(() {
-            _loggedIn = true;
-          });
-          // show error animation of button
-          _btnController.error();
-          Timer(Duration(seconds: 2), () {
-            _btnController.stop();
-            _btnController.reset();
-          });
-        } else if (data["status"].containsKey("success")) {
-          // Login Success
-          //show sucess animation of button and push to main screen
-          _btnController.success();
-          Timer(Duration(seconds: 2), () {
-            Navigator.pushReplacementNamed(context, MainNav.id);
-            _btnController.stop();
-            _btnController.reset();
-          });
-        }
-      } else {
-        // show error animation on button
-        _btnController.error();
-        Timer(Duration(seconds: 2), () {
-          _btnController.stop();
-          _btnController.reset();
+        // use session to post data to backend and await response
+        session.post(loginEndpoint, postData).then((value) {
+          var data = value;
+
+          // check if whether login was succesfull
+          if (data.containsKey("failure")) {
+            // Login failure(User not found)
+            setState(() {
+              _isInvalidEmail = true;
+              _isInvalidPassword = true;
+            });
+            // show error animation of button
+            _btnController.error();
+            Timer(Duration(seconds: 2), () {
+              _btnController.stop();
+              _btnController.reset();
+            });
+          } else if (data["status"].containsKey("failure")) {
+            // Login failure(Wrong password)
+            setState(() {
+              _isInvalidPassword = true;
+            });
+            // show error animation of button
+            _btnController.error();
+            Timer(Duration(seconds: 2), () {
+              _btnController.stop();
+              _btnController.reset();
+            });
+          } else if (data["status"].containsKey("illegal")) {
+            // Login failure(User already logged in)
+            setState(() {
+              _loggedIn = true;
+            });
+            // show error animation of button
+            _btnController.error();
+            Timer(Duration(seconds: 2), () {
+              _btnController.stop();
+              _btnController.reset();
+            });
+          } else if (data["status"].containsKey("success")) {
+            // Login Success
+            //show sucess animation of button and push to main screen
+            _btnController.success();
+            Timer(Duration(seconds: 2), () {
+              Navigator.pushReplacementNamed(context, MainNav.id);
+              _btnController.stop();
+              _btnController.reset();
+            });
+          } else {
+            // show error animation on button
+            _btnController.error();
+            Timer(Duration(seconds: 2), () {
+              _btnController.stop();
+              _btnController.reset();
+            });
+          }
         });
       }
     }
