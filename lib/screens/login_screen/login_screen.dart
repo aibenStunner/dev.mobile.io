@@ -8,9 +8,10 @@ import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/radio_button.dart';
 import 'package:gods_eye/components/rounded_button.dart';
 import 'package:gods_eye/screens/main_nav.dart';
-import 'package:gods_eye/utils/session.dart';
 import 'package:crypto/crypto.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
+import 'package:gods_eye/utils/hive/adapters/Session.dart';
+import 'package:hive/hive.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
@@ -24,8 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Login form key to manage validation
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
-
-  Session session = Session();
 
   // Login data
   String email;
@@ -109,11 +108,24 @@ class _LoginScreenState extends State<LoginScreen> {
           "password": "$hashedPassword",
         };
 
+        // open box in hive for session
+        var box = await Hive.openBox('session');
+
+        // initialize session
+        var session = Session()..headers = {};
+
+        // add session to box
+        box.add(session);
+
         // use session to post data to backend and await response
         session.post(loginEndpoint, postData).then((value) {
+          // save current state of hive
+          session.save();
+
+          // retrive data from post request
           var data = value;
 
-          // check if whether login was succesfull
+          // check if whether login was sccesfull
           if (data.containsKey("failure")) {
             // Login failure(User not found)
             setState(() {

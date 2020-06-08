@@ -1,10 +1,16 @@
+import 'package:hive/hive.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-class Session {
-  Map<String, String> headers = {};
+part 'Session.g.dart';
 
+@HiveType(typeId: 0)
+class Session extends HiveObject {
+
+  @HiveField(0)
+  Map<String, String> headers;
+  
   Future<Map> get(String url) async {
     http.Response response = await http.get(url, headers: headers);
     updateCookie(response);
