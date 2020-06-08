@@ -157,14 +157,14 @@ class _LoginScreenState extends State<LoginScreen> {
               _btnController.stop();
               _btnController.reset();
             });
-          } else {
-            // show error animation on button
-            _btnController.error();
-            Timer(Duration(seconds: 2), () {
-              _btnController.stop();
-              _btnController.reset();
-            });
           }
+        });
+      } else {
+        // show error animation on button
+        _btnController.error();
+        Timer(Duration(seconds: 2), () {
+          _btnController.stop();
+          _btnController.reset();
         });
       }
     }
