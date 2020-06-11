@@ -21,6 +21,9 @@ void main() async {
 
   // register session adapter with hive
   Hive.registerAdapter(SessionAdapter());
+  
+  // open box in hive for session
+  await Hive.openBox<Session>('session');
 
   return runApp(MyApp());
 }

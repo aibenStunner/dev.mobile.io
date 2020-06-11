@@ -108,23 +108,20 @@ class _LoginScreenState extends State<LoginScreen> {
           "password": "$hashedPassword",
         };
 
-        // open box in hive for session
-        var box = await Hive.openBox('session');
+        // open session box
+        final sessionBox = Hive.box<Session>('session');
 
         // initialize session
-        var session = Session()..headers = {};
+        Session session = Session()..headers = {};
 
         // add session to box
-        box.add(session);
+        sessionBox.put(0, session);
 
         // use session to post data to backend and await response
         session.post(loginEndpoint, postData).then((value) {
-          // save current state of hive
-          session.save();
-
           // retrive data from post request
           var data = value;
-
+      
           // check if whether login was sccesfull
           if (data.containsKey("failure")) {
             // Login failure(User not found)

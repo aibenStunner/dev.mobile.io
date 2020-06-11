@@ -6,6 +6,8 @@ import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/screens/login_screen/login_screen.dart';
+import 'package:gods_eye/utils/hive/adapters/Session.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:gods_eye/screens/profile_screen/children_list.dart';
 
@@ -15,14 +17,22 @@ class ProfileScreen extends StatelessWidget {
       'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/logout';
 
   void _validateLogout(context) async {
-    // post data to backend and await response
-    var response = await http.post(logoutEndpoint, body: {});
-    var data = jsonDecode(response.body);
-    print(data);
-    // logout the user
-    if (data["status"].containsKey("failure")) {
-      Navigator.pushReplacementNamed(context, LoginScreen.id);
-    }
+    // open session box
+    final sessionBox = Hive.box<Session>('session');
+
+    // get saved session from hive db
+    Session session = sessionBox.get(0);
+
+    // use session to post data to backend and await response
+    session.post(logoutEndpoint, {}).then((value) {
+      // retrive data from post request
+      var data = value;
+
+      // validate logout and log user out
+      if (data["status"].containsKey("success")) {
+        Navigator.pushReplacementNamed(context, LoginScreen.id);
+      }
+    });
   }
 
   @override
