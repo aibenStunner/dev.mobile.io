@@ -1,14 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
+import 'package:gods_eye/models/user/UserData.dart';
 import 'package:gods_eye/screens/login_screen/login_screen.dart';
-import 'package:gods_eye/utils/hive/adapters/Session.dart';
+import 'package:gods_eye/models/session/Session.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart' as http;
 import 'package:gods_eye/screens/profile_screen/children_list.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -107,7 +105,7 @@ class ProfileScreen extends StatelessWidget {
                     width: screenWidth * 0.7,
                     child: Center(
                       child: Text(
-                        "Laboski Bezoz",
+                        "${Hive.box<UserData>('user_data').get(0).firstName} ${Hive.box<UserData>('user_data').get(0).lastName}",
                         style: textTheme.headline5,
                       ),
                     ),

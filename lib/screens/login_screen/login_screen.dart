@@ -7,10 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/radio_button.dart';
 import 'package:gods_eye/components/rounded_button.dart';
+import 'package:gods_eye/models/user/UserData.dart';
 import 'package:gods_eye/screens/main_nav.dart';
 import 'package:crypto/crypto.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
-import 'package:gods_eye/utils/hive/adapters/Session.dart';
+import 'package:gods_eye/models/session/Session.dart';
 import 'package:hive/hive.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -121,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
         session.post(loginEndpoint, postData).then((value) {
           // retrive data from post request
           var data = value;
-      
+
           // check if whether login was sccesfull
           if (data.containsKey("failure")) {
             // Login failure(User not found)
@@ -159,6 +160,20 @@ class _LoginScreenState extends State<LoginScreen> {
             });
           } else if (data["status"].containsKey("success")) {
             // Login Success
+
+            // Get user data and store in User_Data Hive Object
+            // open UserData box
+            final userBox = Hive.box<UserData>('user_data');
+
+            // initialize user data
+            UserData user = UserData();
+
+            // update user data
+            user.updateData(data);
+
+            // add user to box
+            userBox.put(0, user);
+
             //show sucess animation of button and push to main screen
             _btnController.success();
             Timer(Duration(seconds: 2), () {

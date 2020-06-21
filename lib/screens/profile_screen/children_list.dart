@@ -1,26 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gods_eye/models/children_model/children_data.dart';
+import 'package:gods_eye/models/child/child.dart';
+import 'package:gods_eye/models/user/UserData.dart';
 import 'package:gods_eye/screens/profile_screen/child_card.dart';
-import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class ChildrenList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChildrenData>(builder: (context, childrenData, child) {
-      return ListView.builder(
-        itemBuilder: (context, index) {
-          final childData = childrenData.children[index];
-          return Childcard(
-              name: childData.name,
-              level: childData.level,
-              imgSrc: childData.imgSrc);
-        },
-        shrinkWrap: true,
-        itemCount: childrenData.childrenCount,
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-      );
-    });
+    return ValueListenableBuilder(
+      valueListenable: Hive.box<UserData>('user_data').listenable(),
+      builder: (context, Box<UserData> box, widget){
+          UserData _user = box.get(0);
+          List<Child> childrenData = _user.children;
+          return ListView.builder(
+          itemBuilder: (context, index) {
+            final childData = childrenData[index];
+            return Childcard(
+                name: "${childData.firstName} ${childData.lastName}",
+                level: childData.level,
+                imgSrc: childData.imgSrc);
+          },
+          shrinkWrap: true,
+          itemCount: childrenData.length,
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+        );
+      },
+    );
   }
 }
