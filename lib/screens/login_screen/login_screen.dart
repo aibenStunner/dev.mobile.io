@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/radio_button.dart';
 import 'package:gods_eye/components/rounded_button.dart';
+import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/models/user/UserData.dart';
 import 'package:gods_eye/screens/main_nav.dart';
 import 'package:crypto/crypto.dart';
@@ -31,9 +32,13 @@ class _LoginScreenState extends State<LoginScreen> {
   String email;
   String password;
 
-  // backend endpoint
+  // login endpoint
   final loginEndpoint =
       'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/login';
+
+  // teachers endpoint
+  final teachersEndpoint =
+      'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/info/teachers';
 
   void _radio() {
     setState(() {
@@ -173,6 +178,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
             // add user to box
             userBox.put(0, user);
+
+            // get teacher data
+            // use session to post data to backend and await response
+            session.post(teachersEndpoint, postData).then((value) {
+              // retrive data from post request
+              var data = value;
+              // Get teacher data and store in User_Data Hive Object
+              // open UserData box
+              final teachersBox = Hive.box<TeachersData>('teachers_data');
+
+              // initialize teachers data
+              TeachersData teachersData = TeachersData();
+
+              // update teachers data
+              teachersData.updateData(data);
+
+              // add teachers to box
+              teachersBox.put(0, teachersData);
+            });
 
             //show sucess animation of button and push to main screen
             _btnController.success();

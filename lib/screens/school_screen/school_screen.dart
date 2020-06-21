@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
+import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/screens/school_screen/teacher_list.dart';
 import 'package:gods_eye/utils/constants.dart';
+import 'package:hive/hive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SchoolScreen extends StatelessWidget {
@@ -16,8 +18,6 @@ class SchoolScreen extends StatelessWidget {
       throw 'Could not launch $url';
     }
   }
-
-  final String headmasterPhone = "054 000 0000"; // headmaster's contact
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class SchoolScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // Make phone call to contact when teacher card is tapped
-                      _makePhoneCall('tel:$headmasterPhone');
+                      _makePhoneCall('tel:${Hive.box<TeachersData>('teachers_data').get(0).headContact}');
                     },
                     child: Container(
                       width: screenWidth * 0.3,
@@ -94,21 +94,21 @@ class SchoolScreen extends StatelessWidget {
                             elevation: 5.0,
                             foregroundColor: Colors.blue.withOpacity(0.5),
                             child: Image.asset(
-                              "images/father.jpg",
+                              "images/teacher.jpg",
                               fit: BoxFit.cover,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: screenHeight * 0.008),
                             child: Text(
-                              "Mr. Peabody",
+                              "${Hive.box<TeachersData>('teachers_data').get(0).headFirstName} ${Hive.box<TeachersData>('teachers_data').get(0).headLastName}",
                               style: textTheme.subtitle2,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: screenHeight * 0.006),
                             child: Text(
-                              headmasterPhone,
+                              "${Hive.box<TeachersData>('teachers_data').get(0).headContact}",
                               style: textTheme.caption
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
@@ -134,7 +134,7 @@ class SchoolScreen extends StatelessWidget {
                   ),
                   ConstrainedBox(
                       constraints:
-                      BoxConstraints(maxHeight: screenHeight * 0.2),
+                          BoxConstraints(maxHeight: screenHeight * 0.2),
                       child: TeachersList()),
                 ],
               ),

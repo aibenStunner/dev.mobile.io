@@ -50,19 +50,17 @@ class TeacherCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.008),
-              child: Text(
-                name,
-                style: textTheme.subtitle2,
-              ),
+            SizedBox(height: screenHeight * 0.008),
+            Text(
+              name,
+              textAlign: TextAlign.center,
+              style: textTheme.subtitle2,
             ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.006),
-              child: Text(
-                contact,
-                style: textTheme.caption.copyWith(fontWeight: FontWeight.bold),
-              ),
+            SizedBox(height: screenHeight * 0.006),
+            Text(
+              contact,
+              textAlign: TextAlign.center,
+              style: textTheme.caption.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),

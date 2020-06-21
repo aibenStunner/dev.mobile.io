@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gods_eye/models/child/child.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
-import 'package:gods_eye/models/teacher_model/teachers_data.dart';
 import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
+import 'package:gods_eye/models/teacher/teacher.dart';
+import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/models/user/UserData.dart';
 import 'package:gods_eye/screens/login_screen/login_screen.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
@@ -24,10 +25,13 @@ void main() async {
   Hive.registerAdapter(SessionAdapter());
   Hive.registerAdapter(UserDataAdapter());
   Hive.registerAdapter(ChildAdapter());
+  Hive.registerAdapter(TeachersDataAdapter());
+  Hive.registerAdapter(TeacherAdapter());
   
   // open box in hive for session
   await Hive.openBox<Session>('session');
   await Hive.openBox<UserData>('user_data');
+  await Hive.openBox<TeachersData>('teachers_data');
 
   return runApp(MyApp());
 }
@@ -39,7 +43,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => StreamData()),
         ChangeNotifierProvider(create: (_) => CameraStreams()),
-        ChangeNotifierProvider(create: (_) => TeachersData()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
