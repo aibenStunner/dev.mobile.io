@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert'; // for the utf8.encode method and jsonDecode
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gods_eye/components/horizontal_line.dart';
 import 'package:gods_eye/components/radio_button.dart';
 import 'package:gods_eye/components/rounded_button.dart';
-import 'package:gods_eye/models/teachers/TeachersData.dart';
-import 'package:gods_eye/models/user/UserData.dart';
 import 'package:gods_eye/screens/main_nav.dart';
-import 'package:crypto/crypto.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
-import 'package:gods_eye/models/session/Session.dart';
-import 'package:hive/hive.dart';
+import 'package:gods_eye/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'login_screen';
@@ -28,17 +23,12 @@ class _LoginScreenState extends State<LoginScreen> {
   // Login form key to manage validation
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
 
+  // user serice object
+  final UserService service = UserService();
+
   // Login data
   String email;
   String password;
-
-  // login endpoint
-  final loginEndpoint =
-      'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/login';
-
-  // teachers endpoint
-  final teachersEndpoint =
-      'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/info/teachers';
 
   void _radio() {
     setState(() {
@@ -104,32 +94,11 @@ class _LoginScreenState extends State<LoginScreen> {
         _loginFormKey.currentState.save();
 
         // dismiss keyboard during async call
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());        
 
-        // md5 hash password before posting
-        var passwordUTF8 = utf8.encode(password); // data being hashed
-        var hashedPassword = md5.convert(passwordUTF8);
-        Map postData = {
-          "email": "$email",
-          "password": "$hashedPassword",
-        };
-
-        // open session box
-        final sessionBox = Hive.box<Session>('session');
-
-        // initialize session
-        Session session = Session()..headers = {};
-
-        // add session to box
-        sessionBox.put(0, session);
-
-        // use session to post data to backend and await response
-        session.post(loginEndpoint, postData).then((value) {
-          // retrive data from post request
-          var data = value;
-
-          // check if whether login was sccesfull
-          if (data.containsKey("failure")) {
+        // call log in function
+        service.userLogin(email: email, password: password).then((res) {
+          if (res == 0) {
             // Login failure(User not found)
             setState(() {
               _isInvalidEmail = true;
@@ -141,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _btnController.stop();
               _btnController.reset();
             });
-          } else if (data["status"].containsKey("failure")) {
+          } else if (res == 1) {
             // Login failure(Wrong password)
             setState(() {
               _isInvalidPassword = true;
@@ -152,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _btnController.stop();
               _btnController.reset();
             });
-          } else if (data["status"].containsKey("illegal")) {
+          } else if (res == 2) {
             // Login failure(User already logged in)
             setState(() {
               _loggedIn = true;
@@ -163,41 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
               _btnController.stop();
               _btnController.reset();
             });
-          } else if (data["status"].containsKey("success")) {
+          } else if (res == 3) {
             // Login Success
-
-            // Get user data and store in User_Data Hive Object
-            // open UserData box
-            final userBox = Hive.box<UserData>('user_data');
-
-            // initialize user data
-            UserData user = UserData();
-
-            // update user data
-            user.updateData(data);
-
-            // add user to box
-            userBox.put(0, user);
-
-            // get teacher data
-            // use session to post data to backend and await response
-            session.post(teachersEndpoint, postData).then((value) {
-              // retrive data from post request
-              var data = value;
-              // Get teacher data and store in User_Data Hive Object
-              // open UserData box
-              final teachersBox = Hive.box<TeachersData>('teachers_data');
-
-              // initialize teachers data
-              TeachersData teachersData = TeachersData();
-
-              // update teachers data
-              teachersData.updateData(data);
-
-              // add teachers to box
-              teachersBox.put(0, teachersData);
-            });
-
             //show sucess animation of button and push to main screen
             _btnController.success();
             Timer(Duration(seconds: 2), () {
