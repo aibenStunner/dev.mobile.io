@@ -1,3 +1,4 @@
+import 'package:custom_splash/custom_splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gods_eye/models/child/child.dart';
@@ -33,7 +34,18 @@ void main() async {
   await Hive.openBox<UserData>('user_data');
   await Hive.openBox<TeachersData>('teachers_data');
 
-  return runApp(MyApp());
+  return runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: CustomSplash(
+      imagePath: 'images/devio.png',
+      backGroundColor: Colors.white,
+      animationEffect: 'fade-in',
+      logoSize: 1000,
+      home: MyApp(),
+      duration: 5000,
+      type: CustomSplashType.StaticDuration,
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
