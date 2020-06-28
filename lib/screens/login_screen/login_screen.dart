@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
         _loginFormKey.currentState.save();
 
         // dismiss keyboard during async call
-        FocusScope.of(context).requestFocus(new FocusNode());        
+        FocusScope.of(context).requestFocus(new FocusNode());
 
         // call log in function
         service.userLogin(email: email, password: password).then((res) {
@@ -134,6 +134,9 @@ class _LoginScreenState extends State<LoginScreen> {
             });
           } else if (res == 3) {
             // Login Success
+            // remember user if selectd
+            if (_isSelected) service.rememberMe();
+            
             //show sucess animation of button and push to main screen
             _btnController.success();
             Timer(Duration(seconds: 2), () {

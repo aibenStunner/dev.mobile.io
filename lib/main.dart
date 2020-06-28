@@ -7,6 +7,7 @@ import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
 import 'package:gods_eye/models/teacher/teacher.dart';
 import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/models/user/UserData.dart';
+import 'package:gods_eye/models/util_model/UserUtil.dart';
 import 'package:gods_eye/screens/login_screen/login_screen.dart';
 import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
 import 'package:gods_eye/screens/stream_screen/stream_fullscreen.dart';
@@ -28,11 +29,14 @@ void main() async {
   Hive.registerAdapter(ChildAdapter());
   Hive.registerAdapter(TeachersDataAdapter());
   Hive.registerAdapter(TeacherAdapter());
-  
+  Hive.registerAdapter(UserUtilAdapter());
+
   // open box in hive for session
   await Hive.openBox<Session>('session');
   await Hive.openBox<UserData>('user_data');
   await Hive.openBox<TeachersData>('teachers_data');
+  await Hive.openBox<UserUtil>('util');
+
 
   return runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -48,7 +52,28 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _userLoggedIn;
+
+  @override
+  void initState() {
+    // open UserUtil box
+    final utilBox = Hive.box<UserUtil>('util');
+
+    // get saved userUtil from hive db
+    UserUtil userUtil = utilBox.get(0, defaultValue: UserUtil());
+
+    // get userLoggedIn status
+    _userLoggedIn = userUtil.userLoggedIn;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -58,7 +83,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: LoginScreen.id,
+        initialRoute: _userLoggedIn ? MainNav.id : LoginScreen.id,
         routes: {
           LoginScreen.id: (context) => LoginScreen(),
           SignUpScreen.id: (context) => SignUpScreen(),

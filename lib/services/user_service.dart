@@ -4,6 +4,7 @@ import 'package:crypto/crypto.dart';
 import 'package:gods_eye/models/session/Session.dart';
 import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/models/user/UserData.dart';
+import 'package:gods_eye/models/util_model/UserUtil.dart';
 import 'package:hive/hive.dart';
 
 class UserService {
@@ -36,11 +37,12 @@ class UserService {
     // initialize session
     Session session = Session()..headers = {};
 
+    // use session to post data to backend and await response
+    final data = await session.post(loginEndpoint, postData);
+
     // add session to box
     sessionBox.put(0, session);
 
-    // use session to post data to backend and await response
-    final data = await session.post(loginEndpoint, postData);
     // check if whether login was sccesfull
     if (data.containsKey("failure")) {
       // Login failure(User not found)
@@ -76,12 +78,49 @@ class UserService {
     final data = await session.post(logoutEndpoint, {});
 
     // validate logout and log user out
-    if (data["status"].containsKey("success"))
+    if (data["status"].containsKey("success")) {
+      forgetMe();
       response = true;
-    else
+      session.headers = {};
+    } else
       response = false;
 
     return response;
+  }
+
+  void rememberMe() {
+    // function to remember user upon login
+    // open util box
+    final utilBox = Hive.box<UserUtil>('util');
+
+    // set userLoggedIn to true
+    UserUtil userUtil = UserUtil()..userLoggedIn = true;
+
+    // add util to box
+    utilBox.put(0, userUtil);
+  }
+
+  void forgetMe() {
+    // function to forget user upon logout
+    // open UserUtil box
+    final utilBox = Hive.box<UserUtil>('util');
+
+    // get saved userUtil from hive db
+    try {
+      UserUtil userUtil = utilBox.get(0);
+
+      // set userLoggedIn to false
+      userUtil.userLoggedIn = false;
+
+      // add util to box
+      utilBox.put(0, userUtil);
+    } catch (e) {
+      // set userLoggedIn to false
+      UserUtil userUtil = UserUtil()..userLoggedIn = false;
+
+      // add util to box
+      utilBox.put(0, userUtil);
+    }
   }
 
   void getUserData(Map data) {
