@@ -2,8 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/vlc_player.dart';
-import 'package:flutter_vlc_player/vlc_player_controller.dart';
+import 'package:gods_eye/components/player.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
 import 'package:gods_eye/models/sub_stream_model/camera.dart';
 import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
@@ -46,7 +45,6 @@ class ScreenLayoutState extends State<ScreenLayout> {
   final SlideContainerController slideContainerController =
       SlideContainerController();
 
-  VlcPlayerController _videoController;
   String urlToStreamVideo;
 
   UnmodifiableListView<Camera> get cameraStreams {
@@ -68,18 +66,6 @@ class ScreenLayoutState extends State<ScreenLayout> {
           cameraStreams[Provider.of<CameraStreams>(context).currentCamera]
               .streamSrc;
     });
-  }
-
-  @override
-  void initState() {
-    _videoController = VlcPlayerController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _videoController.dispose();
   }
 
   @override
@@ -110,21 +96,14 @@ class ScreenLayoutState extends State<ScreenLayout> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      height: screenHeight * 0.35,
-                      width: screenWidth,
-                      color: Colors.black,
-                      child: VlcPlayer(
-                        defaultWidth: (screenHeight * 0.35).toInt(),
-                        defaultHeight: (screenWidth).toInt(),
-                        url: urlToStreamVideo,
-                        controller: _videoController,
-                        placeholder: Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            color: Colors.black,
-                            child: Center(child: CircularProgressIndicator())),
-                      ),
-                    ),
+                        height: screenHeight * 0.35,
+                        width: screenWidth,
+                        color: Colors.black,
+                        child: Player(
+                          urlToStreamVideo: urlToStreamVideo,
+                          width: screenWidth,
+                          height: screenHeight * 0.35,
+                        )),
                     Padding(
                       padding: EdgeInsets.only(
                         top: screenHeight * 0.024,
@@ -165,7 +144,6 @@ class ScreenLayoutState extends State<ScreenLayout> {
                           GestureDetector(
                             onTap: () {
 //                              Navigator.of(context).pop();
-                              _videoController.dispose();
                               Navigator.popAndPushNamed(
                                   context, StreamFullScreen.id);
                             },

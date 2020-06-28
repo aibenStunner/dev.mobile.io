@@ -9,7 +9,9 @@ class CameraStreams extends ChangeNotifier {
       Camera(
           title: 'Camera 1',
           imgSrc: 'images/cameras/cafEast_cam1.jpeg',
-          streamSrc: 'http://206.255.127.63:88/mjpg/video.mjpg'),
+          // streamSrc: 'http://206.255.127.63:88/mjpg/video.mjpg'
+          streamSrc: 'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/feed/2'
+          ),
       Camera(
           title: 'Camera 2',
           imgSrc: 'images/cameras/cafEast_cam2.jpg',

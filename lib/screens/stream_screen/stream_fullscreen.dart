@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_vlc_player/vlc_player.dart';
-import 'package:flutter_vlc_player/vlc_player_controller.dart';
+import 'package:gods_eye/components/player.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
 import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
 import 'package:gods_eye/screens/stream_screen/stream_screen.dart';
@@ -18,7 +17,6 @@ class StreamFullScreen extends StatefulWidget {
 }
 
 class _StreamFullScreenState extends State<StreamFullScreen> {
-  VlcPlayerController _videoControllerFull;
   String urlToStreamVideo;
 
   @override
@@ -34,7 +32,6 @@ class _StreamFullScreenState extends State<StreamFullScreen> {
 
   @override
   void initState() {
-    _videoControllerFull = VlcPlayerController();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -49,7 +46,6 @@ class _StreamFullScreenState extends State<StreamFullScreen> {
       DeviceOrientation.portraitUp,
     ]);
     BackButtonInterceptor.remove(backInterceptor);
-    _videoControllerFull.dispose();
     super.dispose();
   }
 
@@ -71,17 +67,10 @@ class _StreamFullScreenState extends State<StreamFullScreen> {
         color: Colors.black,
         child: Stack(
           children: <Widget>[
-            VlcPlayer(
-              defaultWidth: screenHeight.toInt(),
-              defaultHeight: screenWidth.toInt(),
-              url: urlToStreamVideo,
-              controller: _videoControllerFull,
-              placeholder: Container(
-                width: screenWidth,
-                height: screenHeight,
-                color: Colors.black,
-                child: Center(child: CircularProgressIndicator()),
-              ),
+            Player(
+              urlToStreamVideo: urlToStreamVideo,
+              width: screenWidth,
+              height: screenHeight,
             ),
             Positioned(
               right: screenWidth * 0.015,
