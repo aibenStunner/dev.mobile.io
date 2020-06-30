@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
             // Login Success
             // remember user if selectd
             if (_isSelected) service.rememberMe();
-            
+
             //show sucess animation of button and push to main screen
             _btnController.success();
             Timer(Duration(seconds: 2), () {

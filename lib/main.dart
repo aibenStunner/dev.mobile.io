@@ -1,8 +1,10 @@
 import 'package:custom_splash/custom_splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gods_eye/models/camera_data/CameraData.dart';
 import 'package:gods_eye/models/child/child.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
+import 'package:gods_eye/models/sub_stream_model/camera.dart';
 import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
 import 'package:gods_eye/models/teacher/teacher.dart';
 import 'package:gods_eye/models/teachers/TeachersData.dart';
@@ -30,13 +32,15 @@ void main() async {
   Hive.registerAdapter(TeachersDataAdapter());
   Hive.registerAdapter(TeacherAdapter());
   Hive.registerAdapter(UserUtilAdapter());
+  Hive.registerAdapter(CameraDataAdapter());
+  Hive.registerAdapter(CameraAdapter());
 
   // open box in hive for session
   await Hive.openBox<Session>('session');
   await Hive.openBox<UserData>('user_data');
   await Hive.openBox<TeachersData>('teachers_data');
   await Hive.openBox<UserUtil>('util');
-
+  await Hive.openBox<CameraData>('cam');
 
   return runApp(MaterialApp(
     debugShowCheckedModeBanner: false,

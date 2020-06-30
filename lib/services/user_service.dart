@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:gods_eye/models/camera_data/CameraData.dart';
 import 'package:gods_eye/models/session/Session.dart';
 import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/models/user/UserData.dart';
@@ -19,6 +20,10 @@ class UserService {
   // logout endpoint
   final logoutEndpoint =
       'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/logout';
+
+  // camera data endpoint
+  final cameraDataEndpoint =
+      'http://godseye-env.eba-gpcz6ppk.us-east-2.elasticbeanstalk.com/parents/info/public_cameras';
 
   Future<int> userLogin({String email, String password}) async {
     int response;
@@ -59,6 +64,12 @@ class UserService {
       // Get user data and store in User_Data Hive Object
       getUserData(data);
 
+      // get children camera data
+      getChildrenCamData(data);
+
+      // get camera data
+      getCameraData();
+
       // get teacher data
       getTeachersData(postData);
       response = 3;
@@ -86,6 +97,42 @@ class UserService {
       response = false;
 
     return response;
+  }
+
+  void getCameraData() async {
+    // open session box
+    final sessionBox = Hive.box<Session>('session');
+
+    // get saved session from hive db
+    Session session = sessionBox.get(0);
+
+    // use session to post data to backend and await response
+    final data = await session.post(cameraDataEndpoint, {});
+
+    // Get camera data and store in CameraData Hive Object
+    // open CameraData box
+    final cameraBox = Hive.box<CameraData>('cam');
+
+    // initialize camera data
+    CameraData cameraData = cameraBox.get(0);
+
+    // update camera data
+    cameraData.addCams(data);
+  }
+
+  void getChildrenCamData(Map data) {
+    // Get camera data and store in CameraData Hive Object
+    // open CameraData box
+    final cameraBox = Hive.box<CameraData>('cam');
+
+    // initialize camera data
+    CameraData cameraData = CameraData();
+
+    // update camera data
+    cameraData.addChildrenCams(data);
+
+    // add data to box
+    cameraBox.put(0, cameraData);
   }
 
   void rememberMe() {
@@ -124,7 +171,7 @@ class UserService {
   }
 
   void getUserData(Map data) {
-    // Get user data and store in User_Data Hive Object
+    // Get user data and store in User Data Hive Object
     // open UserData box
     final userBox = Hive.box<UserData>('user_data');
 

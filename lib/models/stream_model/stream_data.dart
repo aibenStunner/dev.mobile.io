@@ -6,6 +6,7 @@ class StreamData extends ChangeNotifier {
   int _selectedStream = 0;
 
   List<Stream> _streams = [
+    Stream(title: "Your Children's Classroom", imgSrc: "images/streams/class.jpg"),
     Stream(title: "Cafeteria - East", imgSrc: "images/streams/cafe_east.jpg"),
     Stream(title: "Cafeteria - West", imgSrc: "images/streams/cafe_west.jpg"),
     Stream(
