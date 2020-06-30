@@ -3,13 +3,14 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gods_eye/components/player.dart';
+import 'package:gods_eye/models/camera_data/CameraData.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
 import 'package:gods_eye/models/sub_stream_model/camera.dart';
-import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
 import 'package:gods_eye/screens/stream_screen/close_page_slide_container.dart';
 import 'package:gods_eye/screens/stream_screen/stream_fullscreen.dart';
 import 'package:gods_eye/screens/stream_screen/sub_stream_list.dart';
 import 'package:gods_eye/utils/constants.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:slide_container/slide_container.dart';
 import 'package:slide_container/slide_container_controller.dart';
@@ -48,12 +49,14 @@ class ScreenLayoutState extends State<ScreenLayout> {
   String urlToStreamVideo;
 
   UnmodifiableListView<Camera> get cameraStreams {
-    return UnmodifiableListView(Provider.of<CameraStreams>(context)
+    return UnmodifiableListView(Hive.box<CameraData>('cam')
+        .get(0)
         .cameraStreams[Provider.of<StreamData>(context).currentStreamTitle]);
   }
 
   int get cameraCount {
-    return Provider.of<CameraStreams>(context)
+    return Hive.box<CameraData>('cam')
+        .get(0)
         .cameraStreams[Provider.of<StreamData>(context).currentStreamTitle]
         .length;
   }
@@ -63,7 +66,7 @@ class ScreenLayoutState extends State<ScreenLayout> {
     super.didChangeDependencies();
     setState(() {
       urlToStreamVideo =
-          cameraStreams[Provider.of<CameraStreams>(context).currentCamera]
+          cameraStreams[Hive.box<CameraData>('cam').get(0).currentCamera]
               .streamSrc;
     });
   }
@@ -128,9 +131,9 @@ class ScreenLayoutState extends State<ScreenLayout> {
                                     letterSpacing: 1.1),
                               ),
                               Text(
-                                cameraStreams[
-                                        Provider.of<CameraStreams>(context)
-                                            .currentCamera]
+                                cameraStreams[Hive.box<CameraData>('cam')
+                                        .get(0)
+                                        .currentCamera]
                                     .title,
                                 style: textTheme.bodyText1.copyWith(
                                     color: Colors.grey,

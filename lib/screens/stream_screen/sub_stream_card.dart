@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
+import 'package:gods_eye/models/camera_data/CameraData.dart';
 import 'package:gods_eye/screens/stream_screen/stream_screen.dart';
 import 'package:gods_eye/utils/constants.dart';
-import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
 
 class SubStreamCard extends StatelessWidget {
   const SubStreamCard({
@@ -24,8 +24,8 @@ class SubStreamCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        if (Provider.of<CameraStreams>(context).currentCamera != sIndex) {
-          Provider.of<CameraStreams>(context).updateCurrentCamera(sIndex);
+        if (Hive.box<CameraData>('cam').get(0).currentCamera != sIndex) {
+          Hive.box<CameraData>('cam').get(0).updateCurrentCamera(sIndex);
           Navigator.of(context).pop();
           Navigator.of(context).push(StreamScreen());
         }
@@ -33,7 +33,7 @@ class SubStreamCard extends StatelessWidget {
       child: Container(
         height: screenHeight * 0.1528,
         width: screenWidth,
-        color: (Provider.of<CameraStreams>(context).currentCamera != sIndex)
+        color: (Hive.box<CameraData>('cam').get(0).currentCamera != sIndex)
             ? Colors.transparent
             : kActiveCardColor,
         child: Padding(
@@ -57,12 +57,12 @@ class SubStreamCard extends StatelessWidget {
                 child: Text(
                   sTitle,
                   style: textTheme.headline1.copyWith(
-                    color: (Provider.of<CameraStreams>(context).currentCamera !=
+                    color: (Hive.box<CameraData>('cam').get(0).currentCamera !=
                             sIndex)
                         ? Colors.grey
                         : Colors.white,
                     fontSize:
-                        (Provider.of<CameraStreams>(context).currentCamera !=
+                        (Hive.box<CameraData>('cam').get(0).currentCamera !=
                                 sIndex)
                             ? 16
                             : 17,

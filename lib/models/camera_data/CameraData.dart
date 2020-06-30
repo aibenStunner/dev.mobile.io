@@ -12,7 +12,6 @@ class CameraData extends HiveObject {
       Camera(
           title: 'Camera 1',
           imgSrc: 'images/cameras/cafEast_cam1.jpeg',
-          // streamSrc: 'http://206.255.127.63:88/mjpg/video.mjpg'
           streamSrc: ''),
       Camera(
           title: 'Camera 2',
@@ -178,6 +177,17 @@ class CameraData extends HiveObject {
           streamSrc: '')
     ],
   };
+
+  @HiveField(1)
+  int _selectedCamera = 0;
+
+  int get currentCamera {
+    return _selectedCamera;
+  }
+
+  void updateCurrentCamera(int index) {
+    _selectedCamera = index;
+  }
 
   void addChildrenCams(Map data) {
     List wardList = data['user']['data'];

@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
-import 'package:provider/provider.dart';
+import 'package:gods_eye/models/camera_data/CameraData.dart';
+import 'package:hive/hive.dart';
 import 'package:slide_container/slide_container.dart';
 import 'package:slide_container/slide_container_controller.dart';
 
@@ -50,7 +50,8 @@ class ClosePageSlideContainerState extends State<ClosePageSlideContainer> {
 
   void onSlideCompleted() {
     if (widget.onSlideCompleted != null) widget.onSlideCompleted();
-    Provider.of<CameraStreams>(context)
+    Hive.box<CameraData>('cam')
+        .get(0)
         .updateCurrentCamera(0); // To reset the selected camera's index.
     Navigator.of(context).pop();
   }

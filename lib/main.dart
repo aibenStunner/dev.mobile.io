@@ -5,7 +5,6 @@ import 'package:gods_eye/models/camera_data/CameraData.dart';
 import 'package:gods_eye/models/child/child.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
 import 'package:gods_eye/models/sub_stream_model/camera.dart';
-import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
 import 'package:gods_eye/models/teacher/teacher.dart';
 import 'package:gods_eye/models/teachers/TeachersData.dart';
 import 'package:gods_eye/models/user/UserData.dart';
@@ -83,7 +82,6 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => StreamData()),
-        ChangeNotifierProvider(create: (_) => CameraStreams()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -3,9 +3,10 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gods_eye/components/player.dart';
+import 'package:gods_eye/models/camera_data/CameraData.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
-import 'package:gods_eye/models/sub_stream_model/camera_streams.dart';
 import 'package:gods_eye/screens/stream_screen/stream_screen.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
@@ -23,9 +24,10 @@ class _StreamFullScreenState extends State<StreamFullScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
-      urlToStreamVideo = Provider.of<CameraStreams>(context)
+      urlToStreamVideo = Hive.box<CameraData>('cam')
+          .get(0)
           .cameraStreams[Provider.of<StreamData>(context).currentStreamTitle]
-              [Provider.of<CameraStreams>(context).currentCamera]
+              [Hive.box<CameraData>('cam').get(0).currentCamera]
           .streamSrc;
     });
   }
