@@ -71,13 +71,18 @@ class _HomeScreenTopState extends State<HomeScreenTop> {
                             padding: EdgeInsets.only(
                               top: screenHeight * 0.08,
                             ),
-                            child: Text(
-                              Provider.of<StreamData>(context)
-                                  .currentStreamTitle,
-                              style: textTheme.headline1.copyWith(
-                                  fontFamily: "SF-Pro-Display-Bold",
-                                  color: Colors.white,
-                                  fontSize: 45.0),
+                            child: Container(
+                              height: screenWidth * 0.5,
+                              child: Center(
+                                child: Text(
+                                  Provider.of<StreamData>(context)
+                                      .currentStreamTitle,
+                                  style: textTheme.headline1.copyWith(
+                                      fontFamily: "SF-Pro-Display-Bold",
+                                      color: Colors.white,
+                                      fontSize: 45.0),
+                                ),
+                              ),
                             ),
                           )
                         ],

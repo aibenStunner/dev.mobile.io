@@ -77,47 +77,52 @@ class SchoolScreen extends StatelessWidget {
                   SizedBox(
                     height: screenHeight * 0.0087,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Make phone call to contact when teacher card is tapped
-                      _makePhoneCall(
-                          'tel:${Hive.box<TeachersData>('teachers_data').get(0).headContact}');
-                    },
-                    child: Container(
-                      width: screenWidth * 0.3,
-                      child: Column(
-                        children: <Widget>[
-                          CircularProfileAvatar(
-                            "",
-                            radius: screenHeight * 0.053,
-                            borderWidth: screenWidth * 0.005,
-                            borderColor: kPrimaryColor,
-                            elevation: 5.0,
-                            foregroundColor: Colors.blue.withOpacity(0.5),
-                            child: Image.asset(
-                              "images/teacher.jpg",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: screenHeight * 0.008),
-                            child: Text(
-                              "${Hive.box<TeachersData>('teachers_data').get(0).headFirstName} ${Hive.box<TeachersData>('teachers_data').get(0).headLastName}",
-                              style: textTheme.subtitle2,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: screenHeight * 0.006),
-                            child: Text(
-                              "${Hive.box<TeachersData>('teachers_data').get(0).headContact}",
-                              style: textTheme.caption.copyWith(
-                                fontWeight: FontWeight.bold,
+                  SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: GestureDetector(
+                      onTap: () {
+                        // Make phone call to contact when teacher card is tapped
+                        _makePhoneCall(
+                            'tel:${Hive.box<TeachersData>('teachers_data').get(0).headContact}');
+                      },
+                      child: Container(
+                        width: screenWidth * 0.3,
+                        child: Column(
+                          children: <Widget>[
+                            CircularProfileAvatar(
+                              "",
+                              radius: screenHeight * 0.053,
+                              borderWidth: screenWidth * 0.005,
+                              borderColor: kPrimaryColor,
+                              elevation: 5.0,
+                              foregroundColor: Colors.blue.withOpacity(0.5),
+                              child: Image.asset(
+                                "images/teacher.jpg",
+                                fit: BoxFit.cover,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: screenHeight * 0.008),
+                              child: Text(
+                                "${Hive.box<TeachersData>('teachers_data').get(0).headFirstName} ${Hive.box<TeachersData>('teachers_data').get(0).headLastName}",
+                                style: textTheme.subtitle2,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(top: screenHeight * 0.006),
+                              child: Text(
+                                "${Hive.box<TeachersData>('teachers_data').get(0).headContact}",
+                                style: textTheme.caption.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
