@@ -40,7 +40,7 @@ class TeacherCard extends StatelessWidget {
           children: <Widget>[
             CircularProfileAvatar(
               "",
-              radius: screenWidth * 0.1,
+              radius: screenHeight * 0.053,
               borderWidth: screenWidth * 0.005,
               borderColor: Colors.white,
               elevation: 5.0,

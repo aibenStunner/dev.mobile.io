@@ -30,7 +30,7 @@ class Childcard extends StatelessWidget {
           children: <Widget>[
             CircularProfileAvatar(
               "",
-              radius: screenWidth * 0.1,
+              radius: screenHeight * 0.053,
               borderWidth: screenWidth * 0.005,
               borderColor: kPrimaryColor,
               elevation: 5.0,
