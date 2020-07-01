@@ -1,24 +1,35 @@
 # gods_eye
 
-**This is a simple mobile application built with Flutter to support surveillance/security solution "video capturing x sensing" .**
+<h2> Motivation<span style='font-size:100px;'>&#127775;</span></h2>	
+<p>
+This work was done and submitted as a course project for Software Engineering at the Department of Computer Engineering, Kwame Nkrumah Univeristy of Science and Technology, Kumasi, Ghana. The aim of the project is to get an indepth understanding of the process involved in bring up an application in Software Engineering.
+</p>
 
-This project is a third year Software Engineering End of Semester Project.
+# Feautures of the app <span style='font-size:100px;'>&#128187;</span>
 
-# Feautures of the app
+Login Screen <p><img src="Images/Login.png" width="170" height="260"></p>
+Home Screen <p align="left"><img src="Images/Home.png" width="170" height="260"></p>
+Video Streaming Screen for room <p align="center"><img src="Images/Video1.png" width="170" height="260"></p>
+School Screen <p align="center"><img src="Images/School.png" width="170" height="260"></p>
+Profile Screen <p align="center"><img src="Images/Profile.png" width="170" height="260"></p>
 
-* Login Screen <p align="center">
-	<img src="">
-	<img src=""></p>
-* Home Screen
-* Video Streaming Screen for room 
-* School Screen
-* Profile Screen
+# Implementation <span style='font-size:100px;'>&#128250;</span> : This is a gif of how the application works <p align="center"><img src="Images/1.gif" width="260" height="520"></p>
 
+# Installation <span style='font-size:100px;'>&#x1f4e6;</span>
+Link for apk download:
 
-A few resources to get you started if this is your first Flutter project:
+[Download apk](https://drive.google.com/drive/folders/1b-KLGeTix7BETogW2dMrxOh1K5Faqqvm)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<h2>Contributing<span style='font-size:100px;'>&#127873;</span></h2>
+<p>Pull requests are welcome.</p>
+
+# Contributors <span style='font-size:100px;'>&#x1F4D3;</span>
+* Gadri Akrong Ebenezer
+* Akakpo Senyo Bright
+* Harold
+* Sese
+* Adeboye
+
 
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
