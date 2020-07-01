@@ -1,10 +1,19 @@
 # gods_eye
 
-A new Flutter application.
+**This is a simple mobile application built with Flutter to support surveillance/security solution "video capturing x sensing" .**
 
-## Getting Started
+This project is a third year Software Engineering End of Semester Project.
 
-This project is a starting point for a Flutter application.
+# Feautures of the app
+
+* Login Screen <p align="center">
+	<img src="">
+	<img src=""></p>
+* Home Screen
+* Video Streaming Screen for room 
+* School Screen
+* Profile Screen
+
 
 A few resources to get you started if this is your first Flutter project:
 
