@@ -7,11 +7,9 @@ This work was done and submitted as a course project for Software Engineering at
 
 # Feautures of the app <span style='font-size:100px;'>&#128187;</span>
 
-Login Screen <p><img src="Images/Login.png" width="170" height="260"></p>
-Home Screen <p align="left"><img src="Images/Home.png" width="170" height="260"></p>
-Video Streaming Screen for room <p align="center"><img src="Images/Video1.png" width="170" height="260"></p>
-School Screen <p align="center"><img src="Images/School.png" width="170" height="260"></p>
-Profile Screen <p align="center"><img src="Images/Profile.png" width="170" height="260"></p>
+<p align="center"><img src="Images/Resource.png" width="620" height="310"></p>
+<p align="center"><img src="Images/Resource2.png" width="620" height="310"></p>
+
 
 # Implementation <span style='font-size:100px;'>&#128250;</span> : This is a gif of how the application works <p align="center"><img src="Images/1.gif" width="260" height="520"></p>
 
