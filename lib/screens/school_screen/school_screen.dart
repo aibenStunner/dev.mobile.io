@@ -51,35 +51,37 @@ class SchoolScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-              top: screenHeight * 0.1,
-              left: 0.0,
-              right: 0.0,
-              child: Column(
-                children: <Widget>[
-                  SvgPicture.asset(
-                    'images/teacher.svg',
-                    height: screenHeight * 0.28,
-                    width: screenWidth * 0.28,
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.03,
-                  ),
-                  Text(
-                    "Headmaster",
-                    style: textTheme.bodyText1
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.0087,
-                  ),
-                  horizontalLine(),
-                  SizedBox(
-                    height: screenHeight * 0.0087,
-                  ),
-                  SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: GestureDetector(
+            SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: 0,
+                  right: 0,
+                  top: screenHeight * 0.088,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      'images/teacher.svg',
+                      height: screenHeight * 0.28,
+                      width: screenWidth * 0.28,
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.03,
+                    ),
+                    Text(
+                      "Headmaster",
+                      style: textTheme.bodyText1
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.0087,
+                    ),
+                    horizontalLine(),
+                    SizedBox(
+                      height: screenHeight * 0.0087,
+                    ),
+                    GestureDetector(
                       onTap: () {
                         // Make phone call to contact when teacher card is tapped
                         _makePhoneCall(
@@ -125,27 +127,27 @@ class SchoolScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.02,
-                  ),
-                  Text(
-                    "Teachers",
-                    style: textTheme.bodyText1
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.0087,
-                  ),
-                  horizontalLine(),
-                  SizedBox(
-                    height: screenHeight * 0.0087,
-                  ),
-                  ConstrainedBox(
-                      constraints:
-                          BoxConstraints(maxHeight: screenHeight * 0.2),
-                      child: TeachersList()),
-                ],
+                    SizedBox(
+                      height: screenHeight * 0.02,
+                    ),
+                    Text(
+                      "Teachers",
+                      style: textTheme.bodyText1
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.0087,
+                    ),
+                    horizontalLine(),
+                    SizedBox(
+                      height: screenHeight * 0.0087,
+                    ),
+                    ConstrainedBox(
+                        constraints:
+                            BoxConstraints(maxHeight: screenHeight * 0.2),
+                        child: TeachersList()),
+                  ],
+                ),
               ),
             ),
           ],

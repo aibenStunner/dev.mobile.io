@@ -31,7 +31,7 @@ class StreamCard extends StatelessWidget {
         },
         child: Container(
           height: screenHeight * 0.3,
-          width: screenWidth * 0.328,
+          width: screenWidth * 0.35,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(screenHeight * 0.03),
               color: Colors.white,
@@ -70,11 +70,11 @@ class StreamCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: screenHeight * 0.001,
-                ),
-              )
+//              Padding(
+//                padding: EdgeInsets.only(
+//                  top: screenHeight * 0.0001,
+//                ),
+//              )
             ],
           ),
         ),

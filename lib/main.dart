@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gods_eye/models/stream_model/stream_data.dart';
 import 'package:gods_eye/models/util_model/UserUtil.dart';
 import 'package:gods_eye/screens/login_screen/login_screen.dart';
-import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
+// import 'package:gods_eye/screens/sign_up_screen/sign_up_screen.dart';
 import 'package:gods_eye/screens/stream_screen/stream_fullscreen.dart';
 import 'package:gods_eye/utils/commons.dart';
 import 'package:hive/hive.dart';
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: _userLoggedIn ? MainNav.id : LoginScreen.id,
         routes: {
           LoginScreen.id: (context) => LoginScreen(),
-          SignUpScreen.id: (context) => SignUpScreen(),
+          // SignUpScreen.id: (context) => SignUpScreen(),
           MainNav.id: (context) => MainNav(),
           StreamFullScreen.id: (context) => StreamFullScreen(),
         },

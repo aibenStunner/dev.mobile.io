@@ -67,24 +67,19 @@ class _HomeScreenTopState extends State<HomeScreenTop> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: screenHeight * 0.08,
-                            ),
-                            child: Container(
-                              height: screenWidth * 0.5,
-                              child: Center(
-                                child: Text(
-                                  Provider.of<StreamData>(context)
-                                      .currentStreamTitle,
-                                  style: textTheme.headline1.copyWith(
-                                      fontFamily: "SF-Pro-Display-Bold",
-                                      color: Colors.white,
-                                      fontSize: 45.0),
-                                ),
+                          Container(
+                            height: screenWidth * 0.5,
+                            child: Center(
+                              child: Text(
+                                Provider.of<StreamData>(context)
+                                    .currentStreamTitle,
+                                style: textTheme.headline1.copyWith(
+                                    fontFamily: "SF-Pro-Display-Bold",
+                                    color: Colors.white,
+                                    fontSize: 45.0),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -100,17 +95,17 @@ class _HomeScreenTopState extends State<HomeScreenTop> {
               translation: Offset(0.0, -0.5),
               child: Row(
                 children: <Widget>[
-                  FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () {},
-                    child: Icon(
-                      Icons.add,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                  SizedBox(
-                    width: screenWidth * 0.03,
-                  ),
+//                  FloatingActionButton(
+//                    backgroundColor: Colors.white,
+//                    onPressed: () {},
+//                    child: Icon(
+//                      Icons.add,
+//                      color: kPrimaryColor,
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    width: screenWidth * 0.03,
+//                  ),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(screenHeight * 0.1),
                     child: RaisedButton(

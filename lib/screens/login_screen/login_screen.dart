@@ -295,21 +295,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(top: screenHeight * 0.045),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    "Forgot Password?",
-                                    style: textTheme.bodyText1.copyWith(
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.w800),
-                                  )
-                                ],
-                              ),
-                            )
+                            // Padding(
+                            //   padding:
+                            //       EdgeInsets.only(top: screenHeight * 0.045),
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.end,
+                            //     children: <Widget>[
+                            //       Text(
+                            //         "Forgot Password?",
+                            //         style: textTheme.bodyText1.copyWith(
+                            //             color: Colors.blue,
+                            //             fontWeight: FontWeight.w800),
+                            //       )
+                            //     ],
+                            //   ),
+                            // )
                           ],
                         ),
                       ),
@@ -361,30 +361,30 @@ class _LoginScreenState extends State<LoginScreen> {
                         horizontalLine()
                       ],
                     ),
-                    SizedBox(
-                      height: screenHeight * 0.053,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "New User? ",
-                          style: textTheme.bodyText1
-                              .copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, SignUpScreen.id);
-                          },
-                          child: Text(
-                            "Sign Up",
-                            style: textTheme.bodyText1.copyWith(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.w800),
-                          ),
-                        )
-                      ],
-                    )
+                    // SizedBox(
+                    //   height: screenHeight * 0.053,
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: <Widget>[
+                    //     Text(
+                    //       "New User? ",
+                    //       style: textTheme.bodyText1
+                    //           .copyWith(fontWeight: FontWeight.w800),
+                    //     ),
+                    //     InkWell(
+                    //       onTap: () {
+                    //         Navigator.pushNamed(context, SignUpScreen.id);
+                    //       },
+                    //       child: Text(
+                    //         "Sign Up",
+                    //         style: textTheme.bodyText1.copyWith(
+                    //             color: Colors.blue,
+                    //             fontWeight: FontWeight.w800),
+                    //       ),
+                    //     )
+                      // ],
+                    // )
                   ],
                 ),
               ),
