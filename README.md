@@ -5,13 +5,13 @@
 This work was done and submitted as a course project for Software Engineering at the Department of Computer Engineering, Kwame Nkrumah Univeristy of Science and Technology, Kumasi, Ghana. The aim of the project is to get an indepth understanding of the process involved in bring up an application in Software Engineering.
 </p>
 
+## Demo :movie_camera:
+Demo video can be found [here](https://youtu.be/0mx5jkTiKyU)
+
 # Feautures of the app <span style='font-size:100px;'>&#128187;</span>
 
 <p align="center"><img src="Images/Resource.png" width="620" height="310"></p>
 <p align="center"><img src="Images/Resource2.png" width="620" height="310"></p>
-
-## Demo :movie_camera:
-Demo video can be found [here](https://youtu.be/0mx5jkTiKyU)
 
 
 # Implementation <span style='font-size:100px;'>&#128250;</span> : This is a gif of how the application works <p align="center"><img src="Images/1.gif" width="260" height="520"></p>
