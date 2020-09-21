@@ -2,6 +2,9 @@
 
 GodsEye Mobile App
 
+## Demo :video_camera:
+![alt-text-1](1.gif "gif1") ![alt-text-2](2.gif "gif2")
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
