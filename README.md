@@ -3,7 +3,7 @@
 GodsEye Mobile App
 
 ## Demo :video_camera:
-![alt-text-1](1.gif "gif1") ![alt-text-2](2.gif "gif2")
+![alt-text-1](res/1.gif "gif1") ![alt-text-2](res/2.gif "gif2")
 
 ## Getting Started
 
