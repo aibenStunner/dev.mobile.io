@@ -3,7 +3,7 @@
 GodsEye Mobile App
 
 ## Demo :video_camera:
-<img src="res/1.gif" width="425"/> <img src="res/1.gif" width="425"/> 
+<img src="res/1.gif" width="200"/> <img src="res/1.gif" width="200"/> 
 
 ## Getting Started
 
